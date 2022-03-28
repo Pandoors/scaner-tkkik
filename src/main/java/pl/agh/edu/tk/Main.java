@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner();
+        scanner.Scan("   12   **   2343  ");
 
-        System.out.println("dzialam!");
     }
 }
