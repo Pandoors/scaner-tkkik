@@ -1,26 +1,36 @@
 package pl.agh.edu.tk.scanner.implementation;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import pl.agh.edu.tk.scanner.MathSymbol;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 @NoArgsConstructor
 public class Scanner {
+
+    @Getter
+    private List<String> tokenList;
 
     /*
      *  0 - 48
      *  9 - 57
      * */
     public void Scan(String mathExpr) {
+        tokenList = new ArrayList<>();
+
         // Usuwanie znakow bialych
         mathExpr = removeWhiteSpaces(mathExpr);
         System.out.println("after removed whitespaces: " + mathExpr);
 
         int openParenthesis = 0;
-        int index = -1;
-        for (char c : mathExpr.toCharArray()) {
-            index++;
+        int index;
+        for ( index = 0; index < mathExpr.length(); index++) {
+
+            char c = mathExpr.charAt(index);
+
             if (!validateToken(c)) {
                 System.out.println("Ten znak nie jest tokenem wyrazenia matematycznego");
                 break;
@@ -28,17 +38,21 @@ public class Scanner {
 
             if (c == MathSymbol.LEFT_PARENTHESIS) {
                 openParenthesis++;
+                tokenList.add(String.valueOf(c));
+
             } else if (c == MathSymbol.RIGHT_PARENTHESIS) {
                 openParenthesis--;
-            } else if (c == MathSymbol.DIVIDE) {
+                tokenList.add(String.valueOf(c));
 
-            } else if (c == MathSymbol.MINUS) {
+            }  else if (c == MathSymbol.MINUS) {
                 char before = mathExpr.charAt(index - 1);
 
                 if (!MathSymbol.isNumber(before) && before != MathSymbol.RIGHT_PARENTHESIS) {
                     System.out.println(c + " w zlym miejscu: " + index);
                 }
-            } else if (c == MathSymbol.PLUS || c == MathSymbol.MULTIPLY) {
+                tokenList.add(String.valueOf(c));
+
+            } else if (c == MathSymbol.PLUS || c == MathSymbol.MULTIPLY || c == MathSymbol.DIVIDE) {
                 if (index == 0) {
                     System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
                     break;
@@ -47,19 +61,34 @@ public class Scanner {
 
                 if (!MathSymbol.isNumber(before) && before != MathSymbol.RIGHT_PARENTHESIS) {
                     System.out.println(c + " w zlym miejscu: " + index);
+                    break;
                 }
+                tokenList.add(String.valueOf(c));
 
             } else {
 
-
+                StringBuilder sb = new StringBuilder();
+                int tempIndex;
+                for (tempIndex = index; tempIndex < mathExpr.length(); tempIndex++) {
+                    char subToken = mathExpr.charAt(tempIndex);
+                    if (MathSymbol.isNumber(subToken)) {
+                        sb.append(subToken);
+                    } else {
+                        break;
+                    }
+                }
+                index = tempIndex - 1;
+                tokenList.add(sb.toString());
 
             }
 
-            if (openParenthesis < 0) {
-                System.out.println("Blad w nawiasowaniu w: index " + index);
-            }
+
+
         }
+        if (openParenthesis != 0) {
+            System.out.println("Blad w nawiasowaniu w: index " + index);
 
+        }
     }
 
     //na samym koncu sparwdzic liczbe otwartych nawiasow
