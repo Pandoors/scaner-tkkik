@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-@NoArgsConstructor
 public class Scanner {
-    @Getter
     private List<String> tokenList;
 
     /*
@@ -61,7 +59,8 @@ public class Scanner {
                         }
                     }
                     index = tempIndex - 1;
-                    tokenList.add("MINUS{ "+sb.toString()+" }");
+                    if (sb.toString().length() == 1) tokenList.add("MINUS{ "+sb.toString()+" }");
+                    else tokenList.add("NEGATIVE NUMBER{ " + sb.toString()+ " }");
 
                 } else {
 
@@ -85,7 +84,8 @@ public class Scanner {
                             }
                         }
                         index = tempIndex - 1;
-                        tokenList.add("MINUS{ "+sb.toString()+" }");
+                        if (sb.toString().length() == 1) tokenList.add("MINUS{ "+sb.toString()+" }");
+                        else tokenList.add("NEGATIVE NUMBER{ " + sb.toString()+ " }");
                     } else {
                         tokenList.add("MINUS{ "+c+" }");
                     }
@@ -162,4 +162,7 @@ public class Scanner {
         return sb.toString();
     }
 
+    public List<String> getTokenList() {
+        return tokenList;
+    }
 }
