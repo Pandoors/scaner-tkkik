@@ -43,7 +43,7 @@ public class Scanner {
                 tokenList.add(String.valueOf(c));
 
             } else if (c == MathSymbol.MINUS) {
-                if (index == mathExpr.length()-1) {
+                if (index == mathExpr.length()-1 || !(MathSymbol.isNumber(mathExpr.charAt(index + 1)) || mathExpr.charAt(index+1) == '(')) {
                     System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
                     break;
                 }
@@ -91,7 +91,6 @@ public class Scanner {
                         tokenList.add(String.valueOf(c));
                     }
                 }
-
 
             } else if (c == MathSymbol.PLUS || c == MathSymbol.MULTIPLY || c == MathSymbol.DIVIDE) {
                 if (index == 0 || index == mathExpr.length()-1) {
