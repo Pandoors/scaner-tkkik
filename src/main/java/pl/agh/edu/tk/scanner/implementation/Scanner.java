@@ -27,8 +27,7 @@ public class Scanner {
 
         int openParenthesis = 0;
         int index;
-        for ( index = 0; index < mathExpr.length(); index++) {
-
+        for (index = 0; index < mathExpr.length(); index++) {
             char c = mathExpr.charAt(index);
 
             if (!validateToken(c)) {
@@ -44,13 +43,53 @@ public class Scanner {
                 openParenthesis--;
                 tokenList.add(String.valueOf(c));
 
-            }  else if (c == MathSymbol.MINUS) {
-                char before = mathExpr.charAt(index - 1);
+            } else if (c == MathSymbol.MINUS) {
 
-                if (!MathSymbol.isNumber(before) && before != MathSymbol.RIGHT_PARENTHESIS) {
-                    System.out.println(c + " w zlym miejscu: " + index);
+                if (index == 0) {
+
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(c);
+                    int tempIndex;
+                    for (tempIndex = index + 1; tempIndex < mathExpr.length(); tempIndex++) {
+                        char subToken = mathExpr.charAt(tempIndex);
+                        if (MathSymbol.isNumber(subToken)) {
+                            sb.append(subToken);
+                        } else {
+                            break;
+                        }
+                    }
+                    index = tempIndex - 1;
+                    tokenList.add(sb.toString());
+
+
+                } else {
+
+                    char before = mathExpr.charAt(index - 1);
+
+                    if (!MathSymbol.isNumber(before) && before != MathSymbol.RIGHT_PARENTHESIS && before != MathSymbol.LEFT_PARENTHESIS) {
+                        System.out.println(c + " w zlym miejscu: " + index);
+                        break;
+                    }
+
+                    if (before == MathSymbol.LEFT_PARENTHESIS) {
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(c);
+                        int tempIndex;
+                        for (tempIndex = index + 1; tempIndex < mathExpr.length(); tempIndex++) {
+                            char subToken = mathExpr.charAt(tempIndex);
+                            if (MathSymbol.isNumber(subToken)) {
+                                sb.append(subToken);
+                            } else {
+                                break;
+                            }
+                        }
+                        index = tempIndex - 1;
+                        tokenList.add(sb.toString());
+                    } else {
+                        tokenList.add(String.valueOf(c));
+                    }
                 }
-                tokenList.add(String.valueOf(c));
+
 
             } else if (c == MathSymbol.PLUS || c == MathSymbol.MULTIPLY || c == MathSymbol.DIVIDE) {
                 if (index == 0) {
@@ -83,7 +122,6 @@ public class Scanner {
             }
 
 
-
         }
         if (openParenthesis != 0) {
             System.out.println("Blad w nawiasowaniu w: index " + index);
@@ -91,7 +129,6 @@ public class Scanner {
         }
     }
 
-    //na samym koncu sparwdzic liczbe otwartych nawiasow
     private boolean validateToken(char token) {
 
         switch (token) {
