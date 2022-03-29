@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 @NoArgsConstructor
 public class Scanner {
 
-    @Getter
     private List<String> tokenList;
 
     /*
@@ -44,7 +43,10 @@ public class Scanner {
                 tokenList.add(String.valueOf(c));
 
             } else if (c == MathSymbol.MINUS) {
-
+                if (index == mathExpr.length()-1) {
+                    System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
+                    break;
+                }
                 if (index == 0) {
 
                     StringBuilder sb = new StringBuilder();
@@ -92,7 +94,7 @@ public class Scanner {
 
 
             } else if (c == MathSymbol.PLUS || c == MathSymbol.MULTIPLY || c == MathSymbol.DIVIDE) {
-                if (index == 0) {
+                if (index == 0 || index == mathExpr.length()-1) {
                     System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
                     break;
                 }
@@ -157,4 +159,7 @@ public class Scanner {
         return sb.toString();
     }
 
+    public List<String> getTokenList() {
+        return tokenList;
+    }
 }
