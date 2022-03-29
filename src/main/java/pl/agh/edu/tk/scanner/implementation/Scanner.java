@@ -36,11 +36,11 @@ public class Scanner {
 
             if (c == MathSymbol.LEFT_PARENTHESIS) {
                 openParenthesis++;
-                tokenList.add("LEFT_PARENTHESIS{"+c+"}");
+                tokenList.add("LEFT_PARENTHESIS{ "+c+" }");
 
             } else if (c == MathSymbol.RIGHT_PARENTHESIS) {
                 openParenthesis--;
-                tokenList.add("RIGHT_PARENTHESIS{"+c+"}");
+                tokenList.add("RIGHT_PARENTHESIS{ "+c+" }");
 
             } else if (c == MathSymbol.MINUS) {
                 if (index == mathExpr.length()-1 || !(MathSymbol.isNumber(mathExpr.charAt(index + 1)) || mathExpr.charAt(index+1) == '(')) {
@@ -61,7 +61,7 @@ public class Scanner {
                         }
                     }
                     index = tempIndex - 1;
-                    tokenList.add("MINUS{"+sb.toString()+"}");
+                    tokenList.add("MINUS{ "+sb.toString()+" }");
 
                 } else {
 
@@ -85,9 +85,9 @@ public class Scanner {
                             }
                         }
                         index = tempIndex - 1;
-                        tokenList.add("MINUS{"+sb.toString()+"}");
+                        tokenList.add("MINUS{ "+sb.toString()+" }");
                     } else {
-                        tokenList.add("MINUS{"+c+"}");
+                        tokenList.add("MINUS{ "+c+" }");
                     }
                 }
 
@@ -103,11 +103,11 @@ public class Scanner {
                     break;
                 }
                 if (c == MathSymbol.PLUS){
-                tokenList.add("PLUS{"+c+"}");}
+                tokenList.add("PLUS{ "+c+" }");}
                 else if(c == MathSymbol.MULTIPLY){
-                    tokenList.add("MULTIPLY{"+c+"}");}
+                    tokenList.add("MULTIPLY{ "+c+" }");}
                 else{
-                    tokenList.add("DIVIDE{"+c+"}");}
+                    tokenList.add("DIVIDE{ "+c+" }");}
 
             } else {
 
@@ -122,7 +122,7 @@ public class Scanner {
                     }
                 }
                 index = tempIndex - 1;
-                tokenList.add("NUBMER{"+sb.toString()+"}");
+                tokenList.add("NUBMER{ "+sb.toString()+" }");
 
             }
 
