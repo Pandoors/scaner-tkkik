@@ -11,10 +11,7 @@ import java.util.regex.Pattern;
 public class Scanner {
     private List<String> tokenList;
 
-    /*
-     *  0 - 48
-     *  9 - 57
-     * */
+
     public void Scan(String mathExpr) {
         tokenList = new ArrayList<>();
 
@@ -34,14 +31,14 @@ public class Scanner {
 
             if (c == MathSymbol.LEFT_PARENTHESIS) {
                 openParenthesis++;
-                tokenList.add("LEFT_PARENTHESIS{ "+c+" }");
+                tokenList.add("LEFT_PARENTHESIS{ " + c + " }");
 
             } else if (c == MathSymbol.RIGHT_PARENTHESIS) {
                 openParenthesis--;
-                tokenList.add("RIGHT_PARENTHESIS{ "+c+" }");
+                tokenList.add("RIGHT_PARENTHESIS{ " + c + " }");
 
             } else if (c == MathSymbol.MINUS) {
-                if (index == mathExpr.length()-1 || !(MathSymbol.isNumber(mathExpr.charAt(index + 1)) || mathExpr.charAt(index+1) == '(')) {
+                if (index == mathExpr.length() - 1 || !(MathSymbol.isNumber(mathExpr.charAt(index + 1)) || mathExpr.charAt(index + 1) == '(')) {
                     System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
                     break;
                 }
@@ -59,8 +56,8 @@ public class Scanner {
                         }
                     }
                     index = tempIndex - 1;
-                    if (sb.toString().length() == 1) tokenList.add("MINUS{ "+sb.toString()+" }");
-                    else tokenList.add("NEGATIVE NUMBER{ " + sb.toString()+ " }");
+                    if (sb.toString().length() == 1) tokenList.add("MINUS{ " + sb.toString() + " }");
+                    else tokenList.add("NEGATIVE_NUMBER{ " + sb.toString() + " }");
 
                 } else {
 
@@ -84,15 +81,15 @@ public class Scanner {
                             }
                         }
                         index = tempIndex - 1;
-                        if (sb.toString().length() == 1) tokenList.add("MINUS{ "+sb.toString()+" }");
-                        else tokenList.add("NEGATIVE NUMBER{ " + sb.toString()+ " }");
+                        if (sb.toString().length() == 1) tokenList.add("MINUS{ " + sb.toString() + " }");
+                        else tokenList.add("NEGATIVE_NUMBER{ " + sb.toString() + " }");
                     } else {
-                        tokenList.add("MINUS{ "+c+" }");
+                        tokenList.add("MINUS{ " + c + " }");
                     }
                 }
 
             } else if (c == MathSymbol.PLUS || c == MathSymbol.MULTIPLY || c == MathSymbol.DIVIDE) {
-                if (index == 0 || index == mathExpr.length()-1) {
+                if (index == 0 || index == mathExpr.length() - 1) {
                     System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
                     break;
                 }
@@ -102,12 +99,13 @@ public class Scanner {
                     System.out.println(c + " w zlym miejscu: " + index);
                     break;
                 }
-                if (c == MathSymbol.PLUS){
-                tokenList.add("PLUS{ "+c+" }");}
-                else if(c == MathSymbol.MULTIPLY){
-                    tokenList.add("MULTIPLY{ "+c+" }");}
-                else{
-                    tokenList.add("DIVIDE{ "+c+" }");}
+                if (c == MathSymbol.PLUS) {
+                    tokenList.add("PLUS{ " + c + " }");
+                } else if (c == MathSymbol.MULTIPLY) {
+                    tokenList.add("MULTIPLY{ " + c + " }");
+                } else {
+                    tokenList.add("DIVIDE{ " + c + " }");
+                }
 
             } else {
 
@@ -122,7 +120,7 @@ public class Scanner {
                     }
                 }
                 index = tempIndex - 1;
-                tokenList.add("NUBMER{ "+sb.toString()+" }");
+                tokenList.add("NUBMER{ " + sb.toString() + " }");
 
             }
 
