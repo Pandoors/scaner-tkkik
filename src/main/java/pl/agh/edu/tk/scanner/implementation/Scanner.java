@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 @NoArgsConstructor
 public class Scanner {
-
+    @Getter
     private List<String> tokenList;
 
     /*
@@ -36,11 +36,11 @@ public class Scanner {
 
             if (c == MathSymbol.LEFT_PARENTHESIS) {
                 openParenthesis++;
-                tokenList.add(String.valueOf(c));
+                tokenList.add("LEFT_PARENTHESIS{"+c+"}");
 
             } else if (c == MathSymbol.RIGHT_PARENTHESIS) {
                 openParenthesis--;
-                tokenList.add(String.valueOf(c));
+                tokenList.add("RIGHT_PARENTHESIS{"+c+"}");
 
             } else if (c == MathSymbol.MINUS) {
                 if (index == mathExpr.length()-1 || !(MathSymbol.isNumber(mathExpr.charAt(index + 1)) || mathExpr.charAt(index+1) == '(')) {
@@ -61,8 +61,7 @@ public class Scanner {
                         }
                     }
                     index = tempIndex - 1;
-                    tokenList.add(sb.toString());
-
+                    tokenList.add("MINUS{"+sb.toString()+"}");
 
                 } else {
 
@@ -86,9 +85,9 @@ public class Scanner {
                             }
                         }
                         index = tempIndex - 1;
-                        tokenList.add(sb.toString());
+                        tokenList.add("MINUS{"+sb.toString()+"}");
                     } else {
-                        tokenList.add(String.valueOf(c));
+                        tokenList.add("MINUS{"+c+"}");
                     }
                 }
 
@@ -103,7 +102,12 @@ public class Scanner {
                     System.out.println(c + " w zlym miejscu: " + index);
                     break;
                 }
-                tokenList.add(String.valueOf(c));
+                if (c == MathSymbol.PLUS){
+                tokenList.add("PLUS{"+c+"}");}
+                else if(c == MathSymbol.MULTIPLY){
+                    tokenList.add("MULTIPLY{"+c+"}");}
+                else{
+                    tokenList.add("DIVIDE{"+c+"}");}
 
             } else {
 
@@ -118,7 +122,7 @@ public class Scanner {
                     }
                 }
                 index = tempIndex - 1;
-                tokenList.add(sb.toString());
+                tokenList.add("NUBMER{"+sb.toString()+"}");
 
             }
 
@@ -158,7 +162,4 @@ public class Scanner {
         return sb.toString();
     }
 
-    public List<String> getTokenList() {
-        return tokenList;
-    }
 }

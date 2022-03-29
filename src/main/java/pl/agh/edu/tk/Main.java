@@ -7,7 +7,8 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner();
-        scanner.Scan("(123-)");
+        scanner.Scan("1-23-(+123)-(-1)+12-12+");
+        System.out.println("All tokens:");
         for (String s : scanner.getTokenList()){
             System.out.println(s);
         }
