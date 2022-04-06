@@ -11,14 +11,14 @@ public class Main {
 
         //Scanning tokens
         Scanner scanner = new Scanner();
-        scanner.Scan("122 +13-(-12/    5)*9  * #  (-99    +1)");
+        scanner.Scan("122 +13-(-12-    5)*9  * #  (-99    +1) # 25");
         System.out.println("\nPrinting list of all tokens:");
         for (String s : scanner.getTokenDescriptionsList()){
             System.out.println(s);
         }
 
         //generating HTML
-        HtmlFactory.generateHtml(scanner);
+        HtmlFactory.generateHtml(scanner.getHtmlBody());
 
 
     }

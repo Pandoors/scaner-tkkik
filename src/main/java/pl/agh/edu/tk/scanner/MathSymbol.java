@@ -15,6 +15,8 @@ public class MathSymbol {
 
     public static final char NUMBER = 'n';
 
+
+
     public static boolean isNumber(char c){
         return  ((int) c >= 48 && (int) c <= 57);
     }

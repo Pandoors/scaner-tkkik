@@ -12,23 +12,14 @@ public class HtmlFactory {
     /**
      * Generates HTML file with colored tokens
      */
-    public static void generateHtml(Scanner scanner) throws IOException {
-        File f = new File("code.htm");
+    public static void generateHtml(String body) throws IOException {
+        File f = new File("code.html");
 
         BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-        bw.write("<html><body>");
-//        for (int ii = 0; ii < 20; ii++) {
-//            bw.write("<p style=\"color:red\">Blah blah..</p>");
-//        }
+        bw.write("<html><body><pre>");
 
-        StringBuilder content = new StringBuilder();
-
-        String code = scanner.getExpression();
-
-
-
-        bw.write(content.toString());
-        bw.write("</body></html>");
+        bw.write(body);
+        bw.write("</pre></body></html>");
         bw.close();
 
     }
