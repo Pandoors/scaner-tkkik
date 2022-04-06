@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@NoArgsConstructor
 public class Scanner {
+
+    @Getter
     private List<String> tokenList;
 
 
@@ -160,7 +163,5 @@ public class Scanner {
         return sb.toString();
     }
 
-    public List<String> getTokenList() {
-        return tokenList;
-    }
+
 }
