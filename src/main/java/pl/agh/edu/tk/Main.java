@@ -11,7 +11,7 @@ public class Main {
 
         //Scanning tokens
         Scanner scanner = new Scanner();
-        scanner.Scan("122 +13-(-12-    5)*9  * #  (-99    +1) # 25");
+        scanner.Scan("122 +13-(-12-f01101100 + z -    5)*9  = #  (-99    +1) # 25*x ");
         System.out.println("\nPrinting list of all tokens:");
         for (String s : scanner.getTokenDescriptionsList()){
             System.out.println(s);
