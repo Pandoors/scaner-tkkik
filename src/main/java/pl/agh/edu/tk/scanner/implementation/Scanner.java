@@ -74,8 +74,13 @@ public class Scanner {
                         tokenList.add(sb.toString());
                     }
                     else {
-                        tokenDescriptionsList.add("NEGATIVE_NUMBER{ " + sb.toString() + " }");
-                        tokenList.add(sb.toString());
+                        String built = sb.toString();
+
+                        tokenList.add(String.valueOf(built.charAt(0)));
+                        tokenDescriptionsList.add("MINUS{ " + built.charAt(0) + " }");
+
+                        tokenList.add(built.substring(0, built.length()-1));
+                        tokenDescriptionsList.add("NUMBER{ " + built.substring(1) + " }");
                     }
 
                 } else {
@@ -103,9 +108,20 @@ public class Scanner {
                             }
                         }
                         index = tempIndex - 1;
-                        if (sb.toString().length() == 1) tokenDescriptionsList.add("MINUS{ " + sb.toString() + " }");
-                        else tokenDescriptionsList.add("NEGATIVE_NUMBER{ " + sb.toString() + " }");
-                        tokenList.add(sb.toString());
+                        if (sb.toString().length() == 1) {
+                            tokenDescriptionsList.add("MINUS{ " + sb.toString() + " }");
+                            tokenList.add(sb.toString());
+                        } else {
+
+                            String built = sb.toString();
+
+                            tokenList.add(String.valueOf(built.charAt(0)));
+                            tokenDescriptionsList.add("MINUS{ " + built.charAt(0) + " }");
+
+                            tokenList.add(built.substring(0, built.length()-1));
+                            tokenDescriptionsList.add("NUMBER{ " + built.substring(1) + " }");
+
+                        }
                     } else {
                         tokenDescriptionsList.add("MINUS{ " + c + " }");
                         tokenList.add(String.valueOf(c));
