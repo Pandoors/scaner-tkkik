@@ -118,7 +118,7 @@ public class Scanner {
                 bodyBuilder.append("</span>");
 
             } else if (c == MathSymbol.MINUS) {
-                if (index == mathExpr.length() - 1 || !(MathSymbol.isNumber(mathExpr.charAt(index + 1)) || mathExpr.charAt(index + 1) == '(')) {
+                if (index == mathExpr.length() - 1) {
                     System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
                     bodyBuilder.append("<span style=\"color:red\">");
                     bodyBuilder.append(c);
