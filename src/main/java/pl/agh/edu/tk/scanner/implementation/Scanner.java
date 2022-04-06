@@ -48,13 +48,13 @@ public class Scanner {
                 break;
             }
 
-            if(c == MathSymbol.HASHTAG) {
+            if (c == MathSymbol.HASHTAG) {
                 tokenDescriptionsList.add("HASHTAG{ " + c + " }");
                 tokenList.add(String.valueOf(c));
 
                 int tempIndex;
 
-                if(index == mathExpr.length()-1){
+                if (index == mathExpr.length() - 1) {
 
                     System.out.println("# nie może znajdować się w tym miejscu : " + index);
                     bodyBuilder.append("<span style=\"color:red\">");
@@ -79,6 +79,14 @@ public class Scanner {
                 index = tempIndex;
 
 
+            } else if (c == MathSymbol.EQUALS) {
+                if (getLastCharacter() == '-') {
+                    System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
+                    break;
+                }
+
+                tokenDescriptionsList.add("EQUAL SIGN{ " + c + " }");
+                tokenList.add(String.valueOf(c));
 
             } else if (c == MathSymbol.LEFT_PARENTHESIS) {
                 bodyBuilder.append("<span style=\"color:purple\">");
@@ -89,7 +97,7 @@ public class Scanner {
                 tokenList.add(String.valueOf(c));
 
             } else if (c == MathSymbol.RIGHT_PARENTHESIS) {
-                if (getLastCharacter() == '-'){
+                if (getLastCharacter() == '-') {
                     System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
                     bodyBuilder.append("<span style=\"color:red\">");
                     bodyBuilder.append(c);
@@ -134,17 +142,16 @@ public class Scanner {
                         }
                     }
                     index = tempIndex - 1;
-                    if (sb.toString().length() == 1){
+                    if (sb.toString().length() == 1) {
                         tokenDescriptionsList.add("MINUS{ " + sb.toString() + " }");
                         tokenList.add(sb.toString());
-                    }
-                    else {
+                    } else {
                         String built = sb.toString();
 
                         tokenList.add(String.valueOf(built.charAt(0)));
                         tokenDescriptionsList.add("MINUS{ " + built.charAt(0) + " }");
 
-                        tokenList.add(built.substring(0, built.length()-1));
+                        tokenList.add(built.substring(0, built.length() - 1));
                         tokenDescriptionsList.add("NUMBER{ " + built.substring(1) + " }");
                     }
 
@@ -152,7 +159,7 @@ public class Scanner {
 
                     char before = getLastCharacter();
 
-                    if (!MathSymbol.isNumber(before) && before != MathSymbol.RIGHT_PARENTHESIS && before != MathSymbol.LEFT_PARENTHESIS) {
+                    if (!(MathSymbol.isNumber(before) || MathSymbol.isLetter(before)) && before != MathSymbol.RIGHT_PARENTHESIS && before != MathSymbol.LEFT_PARENTHESIS) {
                         System.out.println(c + " w zlym miejscu: " + index);
                         break;
                     }
@@ -186,7 +193,7 @@ public class Scanner {
                             tokenList.add(String.valueOf(built.charAt(0)));
                             tokenDescriptionsList.add("MINUS{ " + built.charAt(0) + " }");
 
-                            tokenList.add(built.substring(0, built.length()-1));
+                            tokenList.add(built.substring(0, built.length() - 1));
                             tokenDescriptionsList.add("NUMBER{ " + built.substring(1) + " }");
 
                         }
@@ -199,7 +206,7 @@ public class Scanner {
                 }
 
             } else if (c == MathSymbol.PLUS || c == MathSymbol.MULTIPLY || c == MathSymbol.DIVIDE) {
-                if (getLastCharacter() == '-'){
+                if (getLastCharacter() == '-') {
                     System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
                     bodyBuilder.append("<span style=\"color:red\">");
                     bodyBuilder.append(c);
@@ -215,7 +222,7 @@ public class Scanner {
                 }
                 char before = getLastCharacter();
 
-                if (!MathSymbol.isNumber(before) && before != MathSymbol.RIGHT_PARENTHESIS) {
+                if (!(MathSymbol.isNumber(before) || MathSymbol.isLetter(before)) && before != MathSymbol.RIGHT_PARENTHESIS) {
                     System.out.println(c + " w zlym miejscu: " + index);
                     bodyBuilder.append("<span style=\"color:red\">");
                     bodyBuilder.append(c);
@@ -234,34 +241,49 @@ public class Scanner {
                 }
                 bodyBuilder.append(c);
 
-            } else {
-                bodyBuilder.append("<span style=\"color:cornflowerblue\">");
-                StringBuilder sb = new StringBuilder();
-                int tempIndex;
-                for (tempIndex = index; tempIndex < mathExpr.length(); tempIndex++) {
-                    char subToken = mathExpr.charAt(tempIndex);
-                    if (subToken == ' ' || subToken == '\t' || subToken == '\r' || subToken == '\n') {
-                        bodyBuilder.append("</span>");
-                        bodyBuilder.append(subToken);
-                        bodyBuilder.append("<span style=\"color:red\">");
-                        continue;
+            } else if (MathSymbol.isNumber(c)) {
+                {
+                    StringBuilder sb = new StringBuilder();
+                    int tempIndex;
+                    for (tempIndex = index; tempIndex < mathExpr.length(); tempIndex++) {
+                        char subToken = mathExpr.charAt(tempIndex);
+                        if (subToken == ' ' || subToken == '\t' || subToken == '\r' || subToken == '\n') {
+                            continue;
+                        }
+                        if (MathSymbol.isNumber(subToken)) {
+                            sb.append(subToken);
+                        } else {
+                            break;
+                        }
                     }
-                    if (MathSymbol.isNumber(subToken)) {
-                        bodyBuilder.append(subToken);
-                        sb.append(subToken);
-                    } else {
-                        break;
-                    }
+                    index = tempIndex - 1;
+                    tokenDescriptionsList.add("NUBMER{ " + sb.toString() + " }");
+                    tokenList.add(sb.toString());
+
+
                 }
-                index = tempIndex - 1;
-                tokenDescriptionsList.add("NUBMER{ " + sb.toString() + " }");
-                tokenList.add(sb.toString());
+            } else {
+                {
+                    StringBuilder sb = new StringBuilder();
+                    int tempIndex;
+                    for (tempIndex = index; tempIndex < mathExpr.length(); tempIndex++) {
+                        char subToken = mathExpr.charAt(tempIndex);
+                        if (subToken == ' ' || subToken == '\t' || subToken == '\r' || subToken == '\n') {
+                            continue;
+                        }
+                        if (MathSymbol.isNumber(subToken) || MathSymbol.isLetter(subToken)) {
+                            sb.append(subToken);
+                        } else {
+                            break;
+                        }
+                    }
+                    index = tempIndex - 1;
+                    tokenDescriptionsList.add("VARIABLE{ " + sb.toString() + " }");
+                    tokenList.add(sb.toString());
 
-                bodyBuilder.append("</span>");
 
+                }
             }
-
-
         }
         if (openParenthesis != 0) {
             System.out.println("Blad w nawiasowaniu w: index " + index);
@@ -280,9 +302,11 @@ public class Scanner {
             case MathSymbol.PLUS:
             case MathSymbol.HASHTAG:
             case MathSymbol.RIGHT_PARENTHESIS:
+            case MathSymbol.EQUALS:
+            case MathSymbol.NUMBER:
                 return true;
             default:
-                return ((int) token >= 48 && (int) token <= 57);
+                return (MathSymbol.isNumber(token) || MathSymbol.isLetter(token));
         }
     }
 
