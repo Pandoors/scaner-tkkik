@@ -12,20 +12,25 @@ import java.util.regex.Pattern;
 public class Scanner {
 
     @Getter
+    private List<String> tokenDescriptionsList;
+
+    @Getter
     private List<String> tokenList;
 
-
     public void Scan(String mathExpr) {
+        tokenDescriptionsList = new ArrayList<>();
         tokenList = new ArrayList<>();
-
         // Usuwanie znakow bialych
-        mathExpr = removeWhiteSpaces(mathExpr);
         System.out.println("after removed whitespaces: " + mathExpr);
 
         int openParenthesis = 0;
         int index;
         for (index = 0; index < mathExpr.length(); index++) {
             char c = mathExpr.charAt(index);
+
+            if (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
+                continue;
+            }
 
             if (!validateToken(c)) {
                 System.out.println("Ten znak nie jest tokenem wyrazenia matematycznego");
@@ -34,11 +39,13 @@ public class Scanner {
 
             if (c == MathSymbol.LEFT_PARENTHESIS) {
                 openParenthesis++;
-                tokenList.add("LEFT_PARENTHESIS{ " + c + " }");
+                tokenDescriptionsList.add("LEFT_PARENTHESIS{ " + c + " }");
+                tokenList.add(String.valueOf(c));
 
             } else if (c == MathSymbol.RIGHT_PARENTHESIS) {
                 openParenthesis--;
-                tokenList.add("RIGHT_PARENTHESIS{ " + c + " }");
+                tokenDescriptionsList.add("RIGHT_PARENTHESIS{ " + c + " }");
+                tokenList.add(String.valueOf(c));
 
             } else if (c == MathSymbol.MINUS) {
                 if (index == mathExpr.length() - 1 || !(MathSymbol.isNumber(mathExpr.charAt(index + 1)) || mathExpr.charAt(index + 1) == '(')) {
@@ -52,6 +59,9 @@ public class Scanner {
                     int tempIndex;
                     for (tempIndex = index + 1; tempIndex < mathExpr.length(); tempIndex++) {
                         char subToken = mathExpr.charAt(tempIndex);
+                        if (subToken == ' ' || subToken == '\t' || subToken == '\r' || subToken == '\n') {
+                            continue;
+                        }
                         if (MathSymbol.isNumber(subToken)) {
                             sb.append(subToken);
                         } else {
@@ -59,12 +69,18 @@ public class Scanner {
                         }
                     }
                     index = tempIndex - 1;
-                    if (sb.toString().length() == 1) tokenList.add("MINUS{ " + sb.toString() + " }");
-                    else tokenList.add("NEGATIVE_NUMBER{ " + sb.toString() + " }");
+                    if (sb.toString().length() == 1){
+                        tokenDescriptionsList.add("MINUS{ " + sb.toString() + " }");
+                        tokenList.add(sb.toString());
+                    }
+                    else {
+                        tokenDescriptionsList.add("NEGATIVE_NUMBER{ " + sb.toString() + " }");
+                        tokenList.add(sb.toString());
+                    }
 
                 } else {
 
-                    char before = mathExpr.charAt(index - 1);
+                    char before = getLastCharacter();
 
                     if (!MathSymbol.isNumber(before) && before != MathSymbol.RIGHT_PARENTHESIS && before != MathSymbol.LEFT_PARENTHESIS) {
                         System.out.println(c + " w zlym miejscu: " + index);
@@ -77,6 +93,9 @@ public class Scanner {
                         int tempIndex;
                         for (tempIndex = index + 1; tempIndex < mathExpr.length(); tempIndex++) {
                             char subToken = mathExpr.charAt(tempIndex);
+                            if (subToken == ' ' || subToken == '\t' || subToken == '\r' || subToken == '\n') {
+                                continue;
+                            }
                             if (MathSymbol.isNumber(subToken)) {
                                 sb.append(subToken);
                             } else {
@@ -84,10 +103,13 @@ public class Scanner {
                             }
                         }
                         index = tempIndex - 1;
-                        if (sb.toString().length() == 1) tokenList.add("MINUS{ " + sb.toString() + " }");
-                        else tokenList.add("NEGATIVE_NUMBER{ " + sb.toString() + " }");
+                        if (sb.toString().length() == 1) tokenDescriptionsList.add("MINUS{ " + sb.toString() + " }");
+                        else tokenDescriptionsList.add("NEGATIVE_NUMBER{ " + sb.toString() + " }");
+                        tokenList.add(sb.toString());
                     } else {
-                        tokenList.add("MINUS{ " + c + " }");
+                        tokenDescriptionsList.add("MINUS{ " + c + " }");
+                        tokenList.add(String.valueOf(c));
+
                     }
                 }
 
@@ -96,18 +118,21 @@ public class Scanner {
                     System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
                     break;
                 }
-                char before = mathExpr.charAt(index - 1);
+                char before = getLastCharacter();
 
                 if (!MathSymbol.isNumber(before) && before != MathSymbol.RIGHT_PARENTHESIS) {
                     System.out.println(c + " w zlym miejscu: " + index);
                     break;
                 }
                 if (c == MathSymbol.PLUS) {
-                    tokenList.add("PLUS{ " + c + " }");
+                    tokenDescriptionsList.add("PLUS{ " + c + " }");
+                    tokenList.add(String.valueOf(c));
                 } else if (c == MathSymbol.MULTIPLY) {
-                    tokenList.add("MULTIPLY{ " + c + " }");
+                    tokenDescriptionsList.add("MULTIPLY{ " + c + " }");
+                    tokenList.add(String.valueOf(c));
                 } else {
-                    tokenList.add("DIVIDE{ " + c + " }");
+                    tokenDescriptionsList.add("DIVIDE{ " + c + " }");
+                    tokenList.add(String.valueOf(c));
                 }
 
             } else {
@@ -116,6 +141,9 @@ public class Scanner {
                 int tempIndex;
                 for (tempIndex = index; tempIndex < mathExpr.length(); tempIndex++) {
                     char subToken = mathExpr.charAt(tempIndex);
+                    if (subToken == ' ' || subToken == '\t' || subToken == '\r' || subToken == '\n') {
+                        continue;
+                    }
                     if (MathSymbol.isNumber(subToken)) {
                         sb.append(subToken);
                     } else {
@@ -123,7 +151,9 @@ public class Scanner {
                     }
                 }
                 index = tempIndex - 1;
-                tokenList.add("NUBMER{ " + sb.toString() + " }");
+                tokenDescriptionsList.add("NUBMER{ " + sb.toString() + " }");
+                tokenList.add(sb.toString());
+
 
             }
 
@@ -150,17 +180,17 @@ public class Scanner {
         }
     }
 
-    private String removeWhiteSpaces(String expression) {
-
-        StringBuilder sb = new StringBuilder();
-        for (char c : expression.toCharArray()) {
-            if (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
-                continue;
+    private char getLastCharacter(){
+        if (tokenList.isEmpty()){
+            return ' ';
+        } else{
+            String obj = tokenList.get(tokenList.size()-1);
+            if (obj.length()==1){
+                return obj.charAt(0);
+            } else{
+                return obj.charAt(obj.length()-1);
             }
-            sb.append(c);
         }
-
-        return sb.toString();
     }
 
 
