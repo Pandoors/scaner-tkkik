@@ -7,23 +7,23 @@ import pl.agh.edu.tk.scanner.MathSymbol;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-
+@NoArgsConstructor
 public class Scanner {
 
-    public List<String> getTokenDescriptionsList() {
-        return tokenDescriptionsList;
-    }
+
 
     @Getter
     private List<String> tokenDescriptionsList;
-
+    @Getter
     private List<String> tokenList;
 
+    @Getter
+    private String expression;
+
     public void Scan(String mathExpr) {
+        this.expression = mathExpr;
         tokenDescriptionsList = new ArrayList<>();
         tokenList = new ArrayList<>();
-        // Usuwanie znakow bialych
-        System.out.println("after removed whitespaces: " + mathExpr);
 
         int openParenthesis = 0;
         int index;
@@ -39,7 +39,31 @@ public class Scanner {
                 break;
             }
 
-            if (c == MathSymbol.LEFT_PARENTHESIS) {
+            if(c == MathSymbol.HASHTAG) {
+                tokenDescriptionsList.add("HASHTAG{ " + c + " }");
+                tokenList.add(String.valueOf(c));
+                int tempIndex;
+
+                if(index == mathExpr.length()-1){
+
+                    System.out.println("# nie może znajdować się w tym miejscu : " + index);
+                    break;
+                }
+
+                for (tempIndex = index + 1; tempIndex < mathExpr.length(); tempIndex++) {
+                    char subToken = mathExpr.charAt(tempIndex);
+
+                    if (subToken == MathSymbol.HASHTAG){
+                        tokenDescriptionsList.add("HASHTAG{ " + subToken + " }");
+                        tokenList.add(String.valueOf(subToken));
+                        break;
+                    }
+
+                }
+                index = tempIndex;
+
+
+            } else if (c == MathSymbol.LEFT_PARENTHESIS) {
                 openParenthesis++;
                 tokenDescriptionsList.add("LEFT_PARENTHESIS{ " + c + " }");
                 tokenList.add(String.valueOf(c));
@@ -199,6 +223,7 @@ public class Scanner {
             case MathSymbol.LEFT_PARENTHESIS:
             case MathSymbol.MULTIPLY:
             case MathSymbol.PLUS:
+            case MathSymbol.HASHTAG:
             case MathSymbol.RIGHT_PARENTHESIS:
                 return true;
             default:
