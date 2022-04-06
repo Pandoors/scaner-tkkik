@@ -94,7 +94,7 @@ public class Scanner {
                 tokenList.add(String.valueOf(c));
 
             } else if (c == MathSymbol.LEFT_PARENTHESIS) {
-                bodyBuilder.append("<span style=\"color:purple\">");
+                bodyBuilder.append("<span style=\"color:mediumpurple\">");
                 bodyBuilder.append(c);
                 bodyBuilder.append("</span>");
                 openParenthesis++;
@@ -113,7 +113,7 @@ public class Scanner {
                 openParenthesis--;
                 tokenDescriptionsList.add("RIGHT_PARENTHESIS{ " + c + " }");
                 tokenList.add(String.valueOf(c));
-                bodyBuilder.append("<span style=\"color:purple\">");
+                bodyBuilder.append("<span style=\"color:mediumpurple\">");
                 bodyBuilder.append(c);
                 bodyBuilder.append("</span>");
 
@@ -269,6 +269,7 @@ public class Scanner {
                             break;
                         }
                     }
+                    bodyBuilder.append("</span>");
                     index = tempIndex - 1;
                     tokenDescriptionsList.add("NUBMER{ " + sb.toString() + " }");
                     tokenList.add(sb.toString());
@@ -296,6 +297,7 @@ public class Scanner {
                             break;
                         }
                     }
+                    bodyBuilder.append("</span>");
                     index = tempIndex - 1;
                     tokenDescriptionsList.add("VARIABLE{ " + sb.toString() + " }");
                     tokenList.add(sb.toString());
