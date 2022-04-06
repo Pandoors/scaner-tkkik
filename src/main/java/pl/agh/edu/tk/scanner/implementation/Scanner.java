@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
 @NoArgsConstructor
 public class Scanner {
 
@@ -68,7 +69,7 @@ public class Scanner {
                 for (tempIndex = index + 1; tempIndex < mathExpr.length(); tempIndex++) {
                     char subToken = mathExpr.charAt(tempIndex);
                     bodyBuilder.append(subToken);
-                    if (subToken == MathSymbol.HASHTAG){
+                    if (subToken == MathSymbol.HASHTAG) {
                         tokenDescriptionsList.add("HASHTAG{ " + subToken + " }");
                         tokenList.add(String.valueOf(subToken));
                         break;
@@ -81,11 +82,15 @@ public class Scanner {
 
             } else if (c == MathSymbol.EQUALS) {
                 if (getLastCharacter() == '-') {
+                    bodyBuilder.append("<span style=\"color:red\">");
+                    bodyBuilder.append(c);
+                    bodyBuilder.append("</span>");
                     System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
                     break;
                 }
 
                 tokenDescriptionsList.add("EQUAL SIGN{ " + c + " }");
+                bodyBuilder.append(c);
                 tokenList.add(String.valueOf(c));
 
             } else if (c == MathSymbol.LEFT_PARENTHESIS) {
@@ -160,6 +165,9 @@ public class Scanner {
                     char before = getLastCharacter();
 
                     if (!(MathSymbol.isNumber(before) || MathSymbol.isLetter(before)) && before != MathSymbol.RIGHT_PARENTHESIS && before != MathSymbol.LEFT_PARENTHESIS) {
+                        bodyBuilder.append("<span style=\"color:red\">");
+                        bodyBuilder.append(c);
+                        bodyBuilder.append("</span>");
                         System.out.println(c + " w zlym miejscu: " + index);
                         break;
                     }
@@ -243,15 +251,20 @@ public class Scanner {
 
             } else if (MathSymbol.isNumber(c)) {
                 {
+                    bodyBuilder.append("<span style=\"color:cornflowerblue\">");
                     StringBuilder sb = new StringBuilder();
                     int tempIndex;
                     for (tempIndex = index; tempIndex < mathExpr.length(); tempIndex++) {
                         char subToken = mathExpr.charAt(tempIndex);
                         if (subToken == ' ' || subToken == '\t' || subToken == '\r' || subToken == '\n') {
+                            bodyBuilder.append("</span>");
+                            bodyBuilder.append(subToken);
+                            bodyBuilder.append("<span style=\"color:cornflowerblue\">");
                             continue;
                         }
                         if (MathSymbol.isNumber(subToken)) {
                             sb.append(subToken);
+                            bodyBuilder.append(subToken);
                         } else {
                             break;
                         }
@@ -264,14 +277,20 @@ public class Scanner {
                 }
             } else {
                 {
+                    bodyBuilder.append("<span style=\"color:darkorange\">");
                     StringBuilder sb = new StringBuilder();
                     int tempIndex;
                     for (tempIndex = index; tempIndex < mathExpr.length(); tempIndex++) {
                         char subToken = mathExpr.charAt(tempIndex);
                         if (subToken == ' ' || subToken == '\t' || subToken == '\r' || subToken == '\n') {
+                            bodyBuilder.append("</span>");
+                            bodyBuilder.append(subToken);
+                            bodyBuilder.append("<span style=\"color:darkorange\">");
                             continue;
                         }
                         if (MathSymbol.isNumber(subToken) || MathSymbol.isLetter(subToken)) {
+                            bodyBuilder.append(subToken);
+
                             sb.append(subToken);
                         } else {
                             break;
@@ -310,15 +329,15 @@ public class Scanner {
         }
     }
 
-    private char getLastCharacter(){
-        if (tokenList.isEmpty()){
+    private char getLastCharacter() {
+        if (tokenList.isEmpty()) {
             return ' ';
-        } else{
-            String obj = tokenList.get(tokenList.size()-1);
-            if (obj.length()==1){
+        } else {
+            String obj = tokenList.get(tokenList.size() - 1);
+            if (obj.length() == 1) {
                 return obj.charAt(0);
-            } else{
-                return obj.charAt(obj.length()-1);
+            } else {
+                return obj.charAt(obj.length() - 1);
             }
         }
     }
