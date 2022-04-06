@@ -8,13 +8,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-@NoArgsConstructor
 public class Scanner {
+
+    public List<String> getTokenDescriptionsList() {
+        return tokenDescriptionsList;
+    }
 
     @Getter
     private List<String> tokenDescriptionsList;
 
-    @Getter
     private List<String> tokenList;
 
     public void Scan(String mathExpr) {
@@ -43,6 +45,10 @@ public class Scanner {
                 tokenList.add(String.valueOf(c));
 
             } else if (c == MathSymbol.RIGHT_PARENTHESIS) {
+                if (getLastCharacter() == '-'){
+                    System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
+                    break;
+                }
                 openParenthesis--;
                 tokenDescriptionsList.add("RIGHT_PARENTHESIS{ " + c + " }");
                 tokenList.add(String.valueOf(c));
@@ -130,6 +136,10 @@ public class Scanner {
                 }
 
             } else if (c == MathSymbol.PLUS || c == MathSymbol.MULTIPLY || c == MathSymbol.DIVIDE) {
+                if (getLastCharacter() == '-'){
+                    System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
+                    break;
+                }
                 if (index == 0 || index == mathExpr.length() - 1) {
                     System.out.println(c + " nie moze znajdowac sie w indexie: " + index);
                     break;
