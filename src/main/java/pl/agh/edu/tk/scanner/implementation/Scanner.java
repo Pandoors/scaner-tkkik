@@ -24,6 +24,18 @@ public class Scanner {
     @Getter
     private String expression;
 
+    public void setTokenDescriptionsList(List<String> tokenDescriptionsList) {
+        this.tokenDescriptionsList = tokenDescriptionsList;
+    }
+
+    public List<String> getTokenDescriptionsList() {
+        return tokenDescriptionsList;
+    }
+
+    public String getHtmlBody() {
+        return htmlBody;
+    }
+
     public void Scan(String mathExpr) {
         this.htmlBody = "";
         StringBuilder bodyBuilder = new StringBuilder();
@@ -132,17 +144,21 @@ public class Scanner {
                     StringBuilder sb = new StringBuilder();
                     sb.append(c);
                     bodyBuilder.append(c);
+                    bodyBuilder.append("<span style=\"color:cornflowerblue\">");
                     int tempIndex;
                     for (tempIndex = index + 1; tempIndex < mathExpr.length(); tempIndex++) {
                         char subToken = mathExpr.charAt(tempIndex);
                         if (subToken == ' ' || subToken == '\t' || subToken == '\r' || subToken == '\n') {
+                            bodyBuilder.append("</span>");
                             bodyBuilder.append(subToken);
+                            bodyBuilder.append("<span style=\"color:cornflowerblue\">");
                             continue;
                         }
                         if (MathSymbol.isNumber(subToken)) {
                             sb.append(subToken);
                             bodyBuilder.append(subToken);
                         } else {
+                            bodyBuilder.append("</span>");
                             break;
                         }
                     }
@@ -156,6 +172,7 @@ public class Scanner {
                         tokenList.add(String.valueOf(built.charAt(0)));
                         tokenDescriptionsList.add("MINUS{ " + built.charAt(0) + " }");
 
+                        bodyBuilder.append(built.substring(1));
                         tokenList.add(built.substring(0, built.length() - 1));
                         tokenDescriptionsList.add("NUMBER{ " + built.substring(1) + " }");
                     }
@@ -176,17 +193,21 @@ public class Scanner {
                         StringBuilder sb = new StringBuilder();
                         sb.append(c);
                         bodyBuilder.append(c);
+                        bodyBuilder.append("<span style=\"color:cornflowerblue\">");
                         int tempIndex;
                         for (tempIndex = index + 1; tempIndex < mathExpr.length(); tempIndex++) {
                             char subToken = mathExpr.charAt(tempIndex);
                             if (subToken == ' ' || subToken == '\t' || subToken == '\r' || subToken == '\n') {
+                                bodyBuilder.append("</span>");
                                 bodyBuilder.append(subToken);
+                                bodyBuilder.append("<span style=\"color:cornflowerblue\">");
                                 continue;
                             }
                             if (MathSymbol.isNumber(subToken)) {
                                 bodyBuilder.append(subToken);
                                 sb.append(subToken);
                             } else {
+                                bodyBuilder.append("</span>");
                                 break;
                             }
                         }
